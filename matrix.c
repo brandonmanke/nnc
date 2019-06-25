@@ -2,8 +2,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 void create_matrix(matrix_t* m, const int row, const int col) {
+    // assert(row != 0 && col != 0); ???
     m->row = row;
     m->col = col;
     m->data = calloc(row * col, sizeof(float));
@@ -18,6 +20,50 @@ void rand_matrix(matrix_t* m, const int row, const int col, const int range) {
             m->data[i*m->col + j] = (float) (rand() % (2 * range + 1)) - range;
         }
     }
+}
+
+matrix_t matrix_mult(matrix_t* m, matrix_t *n) {
+    // consider just using if statements?
+    assert(m->col == n->row);
+    matrix_t prod;
+    create_matrix(&prod, m->row, n->col);
+    for (int i = 0; i < prod.row; i++) {
+        for (int j = 0; j < prod.col; j++) {
+            for (int k = 0; k < m->col; k++) {
+                // prod.row == m->row
+                // prod.col == n->col
+                // m->col == n->row
+                // 2D equivalent: prod[i][j] += (m[i][k] * n[k][j]);
+                // iterate n by col major & m by row major summing + product
+                prod.data[i*prod.col + j] += (m->data[i*m->col + k] * n->data[k*n->row + j]);
+            }
+        }
+    }
+    return prod;
+}
+
+matrix_t matrix_mult_scalar(matrix_t* m, const int scalar) {
+    matrix_t prod;
+    create_matrix(&prod, m->row, m->col);
+    for (int i = 0; i < m->row; i++) {
+        for (int j = 0; j < m->col; j++) {
+            prod.data[i*m->col + j] = scalar * m->data[i*m->col + j];
+        }
+    }
+    return prod;
+}
+
+matrix_t matrix_add(matrix_t* m, matrix_t* n) {
+    assert((m->row == n->row) && (m->col == n->col));
+    matrix_t sum;
+    create_matrix(&sum, m->row, m->col);
+    for (int i = 0; i < m->row; i++) {
+        for (int j = 0; j < m->col; j++) {
+            int index = i*m->col + j;
+            sum.data[index] = m->data[index] + n->data[index];
+        }
+    }
+    return sum;
 }
 
 matrix_t transpose_matrix(matrix_t* m) {
@@ -41,7 +87,6 @@ matrix_t copy_matrix(matrix_t* m) {
     }
     return c;
 }
-
 
 // print to stdout
 void print_matrix(matrix_t* m) {

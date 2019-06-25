@@ -1,5 +1,7 @@
 #include "activations.h"
 
+#include <stdlib.h>
+
 // ReLU activation function
 // consider sigmoid also
 // just take float*? would work for both vector and matrix
