@@ -11,15 +11,17 @@ int main(int argc, char* argv[]) {
 
     // VECTOR
 
-    vector_t rand_layer;
-    rand_vector(&rand_layer, 10, 100);
-    float* after_activation = relu(rand_layer.data, rand_layer.size);
-    for (int i = 0; i < rand_layer.size; i++) {
+    matrix_t rand_layer;
+    rand_matrix(&rand_layer, 1, 10, 100);
+    // row vs col shouldnt matter for 1-D 
+    // which ever dimension is not 1 is fine since we are always using 1-D array
+    float* after_activation = relu(rand_layer.data, rand_layer.col);
+    for (int i = 0; i < rand_layer.col; i++) {
         printf("before relu: %f  |  ", rand_layer.data[i]);
         printf("after relu: %f\n", after_activation[i]);
     }
     free(after_activation);
-    free_vector(&rand_layer);
+    free_matrix(&rand_layer);
 
     // MATRIX
 

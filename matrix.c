@@ -5,7 +5,7 @@
 #include <assert.h>
 
 void create_matrix(matrix_t* m, const int row, const int col) {
-    // assert(row != 0 && col != 0); ???
+    assert(row != 0 && col != 0);
     m->row = row;
     m->col = col;
     m->data = calloc(row * col, sizeof(float));
@@ -16,13 +16,13 @@ void rand_matrix(matrix_t* m, const int row, const int col, const int range) {
     create_matrix(m, row, col);
     for (int i = 0; i < row; i++) {
         for (int j = 0; j < col; j++) {
-            float div = (RAND_MAX / range);
             m->data[i*m->col + j] = (float) (rand() % (2 * range + 1)) - range;
         }
     }
 }
 
-matrix_t matrix_mult(matrix_t* m, matrix_t *n) {
+// consider alt functions where m is product?
+matrix_t matrix_mult(const matrix_t* m, const matrix_t *n) {
     // consider just using if statements?
     assert(m->col == n->row);
     matrix_t prod;
@@ -42,7 +42,8 @@ matrix_t matrix_mult(matrix_t* m, matrix_t *n) {
     return prod;
 }
 
-matrix_t matrix_mult_scalar(matrix_t* m, const int scalar) {
+// consider alt functions where we modify m directly (i.e. m is product)
+matrix_t matrix_mult_scalar(const matrix_t* m, const int scalar) {
     matrix_t prod;
     create_matrix(&prod, m->row, m->col);
     for (int i = 0; i < m->row; i++) {
@@ -53,7 +54,8 @@ matrix_t matrix_mult_scalar(matrix_t* m, const int scalar) {
     return prod;
 }
 
-matrix_t matrix_add(matrix_t* m, matrix_t* n) {
+// consider alt functions where we modify m directly (i.e. m is sum)
+matrix_t matrix_add(const matrix_t* m, const matrix_t* n) {
     assert((m->row == n->row) && (m->col == n->col));
     matrix_t sum;
     create_matrix(&sum, m->row, m->col);
@@ -66,7 +68,7 @@ matrix_t matrix_add(matrix_t* m, matrix_t* n) {
     return sum;
 }
 
-matrix_t transpose_matrix(matrix_t* m) {
+matrix_t transpose_matrix(const matrix_t* m) {
     matrix_t t;
     create_matrix(&t, m->col, m->row);
     for (int i = 0; i < m->row; i++) {
@@ -77,7 +79,7 @@ matrix_t transpose_matrix(matrix_t* m) {
     return t;
 }
 
-matrix_t copy_matrix(matrix_t* m) {
+matrix_t copy_matrix(const matrix_t* m) {
     matrix_t c;
     create_matrix(&c, m->row, m->col);
     for (int i = 0; i < m->row; i++) {
@@ -89,7 +91,7 @@ matrix_t copy_matrix(matrix_t* m) {
 }
 
 // print to stdout
-void print_matrix(matrix_t* m) {
+void print_matrix(const matrix_t* m) {
     for (int i = 0; i < m->row; i++) {
         for (int j = 0; j < m->col; j++) {
             if (j == 0) {
