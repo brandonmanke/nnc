@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "vector.h"
 #include "matrix.h"
 #include "activations.h"
 
@@ -15,12 +14,21 @@ int main(int argc, char* argv[]) {
     rand_matrix(&rand_layer, 1, 10, 100);
     // row vs col shouldnt matter for 1-D 
     // which ever dimension is not 1 is fine since we are always using 1-D array
-    float* after_activation = relu(rand_layer.data, rand_layer.col);
+    float* after_relu = relu_activation(rand_layer.data, rand_layer.col);
+    float* after_sigmoid = sigmoid_activation(rand_layer.data, rand_layer.col);
+    float* after_tanh = tanh_activation(rand_layer.data, rand_layer.col);
+    float* after_softmax = softmax_activation(rand_layer.data, rand_layer.col);
     for (int i = 0; i < rand_layer.col; i++) {
-        printf("before relu: %f  |  ", rand_layer.data[i]);
-        printf("after relu: %f\n", after_activation[i]);
+        printf("input layer: %f  |  ", rand_layer.data[i]);
+        printf("after relu: %f | ", after_relu[i]);
+        printf("after sigmoid: %f | ", after_sigmoid[i]);
+        printf("after tanh: %f | ", after_tanh[i]);
+        printf("after softmax: %f\n", after_softmax[i]);
     }
-    free(after_activation);
+    free(after_relu);
+    free(after_sigmoid);
+    free(after_tanh);
+    free(after_softmax);
     free_matrix(&rand_layer);
 
     // MATRIX
