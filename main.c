@@ -33,6 +33,12 @@ int main(int argc, char* argv[]) {
 
     // MATRIX
 
+    matrix_t id;
+    create_identity_matrix(&id, 3, 3);
+    printf("printing 3x3 identity matrix:\n");
+    print_matrix(&id);
+    printf("trace 3x3 id: %.1f\n", trace_matrix(&id)); // should be 3.0
+
     matrix_t m;
     rand_matrix(&m, 2, 2, 5);
     printf("printing matrix m:\n");
@@ -48,17 +54,18 @@ int main(int argc, char* argv[]) {
     print_matrix(&n);
 
     printf("product of m*n:\n");
-    matrix_t p = matrix_mult(&m, &n);
+    matrix_t p = mult_matrix(&m, &n);
     print_matrix(&p);
 
     printf("mult by -1:\n");
-    matrix_t negative_p = matrix_mult_scalar(&p, -1);
+    matrix_t negative_p = scalar_mult_matrix(&p, -1.0f);
     print_matrix(&negative_p);
 
     printf("sum of p + -p:\n");
-    matrix_t sum = matrix_add(&p, &negative_p);
+    matrix_t sum = add_matrix(&p, &negative_p);
     print_matrix(&sum); // should be 0 matrix
     
+    free_matrix(&id);
     free_matrix(&m);
     free_matrix(&t);
     free_matrix(&p);

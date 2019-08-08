@@ -13,13 +13,17 @@ void create_matrix(matrix_t* m, const int row, const int col);
 
 void rand_matrix(matrix_t* m, const int row, const int col, const int range);
 
-matrix_t matrix_mult(const matrix_t* m, const matrix_t* n);
+void create_identity_matrix(matrix_t* m, const int row, const int col);
 
-matrix_t matrix_mult_scalar(const matrix_t* m, const int scalar);
+matrix_t mult_matrix(const matrix_t* m, const matrix_t* n);
 
-matrix_t matrix_add(const matrix_t* m, const matrix_t* n);
+matrix_t scalar_mult_matrix(const matrix_t* m, const float scalar);
+
+matrix_t add_matrix(const matrix_t* m, const matrix_t* n);
 
 matrix_t transpose_matrix(const matrix_t* m);
+
+float trace_matrix(const matrix_t* m);
 
 matrix_t copy_matrix(const matrix_t* m);
 

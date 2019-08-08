@@ -4,8 +4,10 @@
 #include <stdlib.h>
 #include <assert.h>
 
+// row and col unsigned?
 void create_matrix(matrix_t* m, const int row, const int col) {
-    assert(row != 0 && col != 0);
+    assert(m != NULL);
+    assert(row > 0 && col > 0);
     m->row = row;
     m->col = col;
     m->data = calloc(row * col, sizeof(float));
@@ -21,9 +23,16 @@ void rand_matrix(matrix_t* m, const int row, const int col, const int range) {
     }
 }
 
-// consider alt functions where m is product?
-matrix_t matrix_mult(const matrix_t* m, const matrix_t *n) {
-    // consider just using if statements?
+void create_identity_matrix(matrix_t* m, const int row, const int col) {
+    assert(row == col);
+    create_matrix(m, row, col);
+    for (int i = 0; i < row; i++) {
+        m->data[i*m->col + i] = 1.0f;
+    }
+}
+
+matrix_t mult_matrix(const matrix_t* m, const matrix_t *n) {
+    assert(m != NULL && n != NULL);
     assert(m->col == n->row);
     matrix_t prod;
     create_matrix(&prod, m->row, n->col);
@@ -43,7 +52,8 @@ matrix_t matrix_mult(const matrix_t* m, const matrix_t *n) {
 }
 
 // consider alt functions where we modify m directly (i.e. m is product)
-matrix_t matrix_mult_scalar(const matrix_t* m, const int scalar) {
+matrix_t scalar_mult_matrix(const matrix_t* m, const float scalar) {
+    assert(m != NULL);
     matrix_t prod;
     create_matrix(&prod, m->row, m->col);
     for (int i = 0; i < m->row; i++) {
@@ -55,7 +65,8 @@ matrix_t matrix_mult_scalar(const matrix_t* m, const int scalar) {
 }
 
 // consider alt functions where we modify m directly (i.e. m is sum)
-matrix_t matrix_add(const matrix_t* m, const matrix_t* n) {
+matrix_t add_matrix(const matrix_t* m, const matrix_t* n) {
+    assert(m != NULL && n != NULL);
     assert((m->row == n->row) && (m->col == n->col));
     matrix_t sum;
     create_matrix(&sum, m->row, m->col);
@@ -69,6 +80,7 @@ matrix_t matrix_add(const matrix_t* m, const matrix_t* n) {
 }
 
 matrix_t transpose_matrix(const matrix_t* m) {
+    assert(m != NULL);
     matrix_t t;
     create_matrix(&t, m->col, m->row);
     for (int i = 0; i < m->row; i++) {
@@ -79,7 +91,18 @@ matrix_t transpose_matrix(const matrix_t* m) {
     return t;
 }
 
+// should still work for non-square matrices
+float trace_matrix(const matrix_t* m) {
+    assert(m != NULL);
+    float trace = 0.0f;
+    for (int i = 0; i < m->row; i++) {
+        trace += m->data[i*m->col + i];
+    }
+    return trace;
+}
+
 matrix_t copy_matrix(const matrix_t* m) {
+    assert(m != NULL);
     matrix_t c;
     create_matrix(&c, m->row, m->col);
     for (int i = 0; i < m->row; i++) {
@@ -92,6 +115,7 @@ matrix_t copy_matrix(const matrix_t* m) {
 
 // print to stdout
 void print_matrix(const matrix_t* m) {
+    assert(m != NULL);
     for (int i = 0; i < m->row; i++) {
         for (int j = 0; j < m->col; j++) {
             if (j == 0) {
