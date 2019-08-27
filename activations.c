@@ -3,12 +3,31 @@
 #include <stdlib.h>
 #include <math.h>
 #include <float.h>
+#include <assert.h>
+
+matrix_t matrix_activation(const matrix_t* m, const activation_fn fn) {
+    assert(m != NULL);
+    matrix_t a;
+    create_matrix(&a, m->row, m->col);
+    size_t size = m->row * m->col;
+    a.data = fn(m->data, size);
+    return a;
+}
 
 // ReLU(x) := max(x, 0)
 float* relu_activation(const float* layer, const size_t s) {
     float* new_layer = calloc(s, sizeof(float));
     for (int i = 0; i < s; i++) {
         new_layer[i] = (layer[i] > 0) ? layer[i] : 0;
+    }
+    return new_layer;
+}
+
+float* lrelu_activation(const float* layer, const size_t s, const float alpha) {
+    float* new_layer = calloc(s, sizeof(float));
+    float a = (alpha < 0) ? 0.01f : alpha;
+    for (int i = 0; i < s; i++) {
+        new_layer[i] = (layer[i] > 0) ? layer[i] : (a * layer[i]);
     }
     return new_layer;
 }

@@ -34,42 +34,48 @@ int main(int argc, char* argv[]) {
     // MATRIX
 
     matrix_t id;
-    create_identity_matrix(&id, 3, 3);
+    identity_matrix(&id, 3, 3);
     printf("printing 3x3 identity matrix:\n");
-    print_matrix(&id);
+    print_matrix(stdout, &id);
     printf("trace 3x3 id: %.1f\n", trace_matrix(&id)); // should be 3.0
 
     matrix_t m;
     rand_matrix(&m, 2, 2, 5);
     printf("printing matrix m:\n");
-    print_matrix(&m);
+    print_matrix(stdout, &m);
 
     matrix_t t = transpose_matrix(&m);
     printf("printing transpose of m:\n");
-    print_matrix(&t);
+    print_matrix(stdout, &t);
 
     matrix_t n;
     rand_matrix(&n, 2, 2, 5);
     printf("printing matrix n:\n");
-    print_matrix(&n);
+    print_matrix(stdout, &n);
 
     printf("product of m*n:\n");
     matrix_t p = mult_matrix(&m, &n);
-    print_matrix(&p);
+    print_matrix(stdout, &p);
 
     printf("mult by -1:\n");
     matrix_t negative_p = scalar_mult_matrix(&p, -1.0f);
-    print_matrix(&negative_p);
+    print_matrix(stdout, &negative_p);
 
     printf("sum of p + -p:\n");
     matrix_t sum = add_matrix(&p, &negative_p);
-    print_matrix(&sum); // should be 0 matrix
+    print_matrix(stdout, &sum); // should be 0 matrix
+
+    printf("activation of p:\n");
+    matrix_t a = matrix_activation(&p, relu_activation);
+    print_matrix(stdout, &a);
     
     free_matrix(&id);
     free_matrix(&m);
+    free_matrix(&n);
     free_matrix(&t);
     free_matrix(&p);
     free_matrix(&negative_p);
     free_matrix(&sum);
+    free_matrix(&a);
     return 0;
 }
