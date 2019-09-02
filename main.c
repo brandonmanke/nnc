@@ -65,9 +65,20 @@ int main(int argc, char* argv[]) {
     matrix_t sum = add_matrix(&p, &negative_p);
     print_matrix(stdout, &sum); // should be 0 matrix
 
-    printf("activation of p:\n");
-    matrix_t a = matrix_activation(&p, relu_activation);
+    printf("activation of p (relu):\n");
+    struct activation act;
+    act.type = RELU;
+    act.function = relu_activation;
+    matrix_t a = matrix_activation(&p, &act);
     print_matrix(stdout, &a);
+
+    printf("activation of p (lrelu):\n");
+    act.type = LRELU;
+    act.function = NULL;
+    float alpha = 0.02f;
+    act.param = (void*) &alpha;
+    matrix_t b = matrix_activation(&p, &act);
+    print_matrix(stdout, &b);
     
     free_matrix(&id);
     free_matrix(&m);
@@ -77,5 +88,6 @@ int main(int argc, char* argv[]) {
     free_matrix(&negative_p);
     free_matrix(&sum);
     free_matrix(&a);
+    free_matrix(&b);
     return 0;
 }

@@ -16,16 +16,18 @@ typedef float* (*activation_fn)(const float*, const size_t);
 struct activation {
     activation_t type;
     activation_fn function;
+    void* param; // optional (e.x. alpha)
 };
 
-matrix_t matrix_activation(const matrix_t* m, const activation_fn fn);
+matrix_t matrix_activation(const matrix_t* m, const struct activation* fn);
 
 // ReLU(x) = max(x, 0)
 // derivative = x > 0 ? 1 : 0
 float* relu_activation(const float* layer, const size_t s);
 
-// TODO fit this into activation_fn type
-float* lrelu_activation(const float* layer, const size_t s, const float alpha);
+float* lrelu_activation(const float* layer, const size_t s);
+
+float* lrelu_activation2(const float* layer, const size_t s, const float alpha);
 
 // Sigmoid(x) = 1 / (1 + e^-x) = e^x / (e^x + 1)
 // derivative = e^x / (1 + e^x)^2
