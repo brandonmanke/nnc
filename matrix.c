@@ -23,6 +23,26 @@ void rand_matrix(matrix_t* m, const int row, const int col, const int range) {
     }
 }
 
+void create_tensor(tensor_t* t, const int dim, const int row, const int col) {
+    assert(t != NULL);
+    assert(dim > 0 && row > 0 && col > 0);
+    t->dimension = dim;
+    t->matrices = calloc(dim, sizeof(matrix_t));
+    for (int i = 0; i < t->dimension; i++) {
+        create_matrix(&t->matrices[i], row, col);
+    }
+}
+
+void rand_tensor(tensor_t* t, const int dim, const int row, const int col, const int range) {
+    assert(t != NULL);
+    assert(dim > 0 && row > 0 && col > 0);
+    t->dimension = dim;
+    t->matrices = calloc(dim, sizeof(matrix_t));
+    for (int i = 0; i < t->dimension; i++) {
+        rand_matrix(&t->matrices[i], row, col, range);
+    }
+}
+
 void identity_matrix(matrix_t* m, const int row, const int col) {
     assert(row == col);
     create_matrix(m, row, col);
@@ -120,26 +140,6 @@ float norm_matrix(const matrix_t* m, const int n) {
     return powf(norm, 1.0f/n);
 }
 
-// Can use gaussian elimination to convert m to 
-// upper triangular matrix U det(U) = product of diagonal
-// so det(m) = -1^m * det(U) where m is number of row changes made
-// to convert m to U
-float determinant_matrix(const matrix_t* m) {
-    assert(m != NULL);
-    assert(m->row == m->col);
-    // TODO
-    // convert m to upper triangular using row reduction 
-    return 0.0f;
-}
-
-// calculate inverse
-// inverse = (1/det(m)) * m
-matrix_t inverse_matrix(const matrix_t* m) {
-    assert(m != NULL);
-    float determinant = determinant_matrix(m);
-    return scalar_mult_matrix(m, 1 / determinant);
-}
-
 matrix_t copy_matrix(const matrix_t* m) {
     assert(m != NULL);
     matrix_t c;
@@ -178,4 +178,15 @@ void free_matrix(matrix_t* m) {
     free(m->data);
     m->row = 0;
     m->col = 0;
+}
+
+void free_tensor(tensor_t* t) {
+    assert(t != NULL);
+    assert(t->matrices != NULL);
+    assert(t->dimension > 0);
+    for (int i = 0; i < t->dimension; i++) {
+        free_matrix(&t->matrices[i]);
+    }
+    free(t->matrices);
+    t->dimension = 0;
 }

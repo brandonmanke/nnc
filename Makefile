@@ -4,7 +4,7 @@ EXEC = out
 
 # -O2?
 build: *.c
-	$(GCC) $(FLAGS) $^ -o $(EXEC)
+	$(GCC) $(FLAGS) $^ -lm -o $(EXEC)
 
 run: build
 	./$(EXEC)

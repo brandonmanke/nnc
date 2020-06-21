@@ -79,7 +79,20 @@ int main(int argc, char* argv[]) {
     act.param = (void*) &alpha;
     matrix_t b = matrix_activation(&p, &act);
     print_matrix(stdout, &b);
-    
+
+    //determinant_matrix(&b);
+    //swap_row_matrix(&b, 0, 1);
+    //print_matrix(stdout, &b);
+
+    tensor_t ten;
+    rand_tensor(&ten, 3, 3, 3, 100);
+    printf("random 3x3x3 tensor:\n");
+    for (int i = 0; i < ten.dimension; i++) {
+        print_matrix(stdout, &ten.matrices[i]);
+        printf("\\\n");
+    }
+    free_tensor(&ten);
+
     free_matrix(&id);
     free_matrix(&m);
     free_matrix(&n);

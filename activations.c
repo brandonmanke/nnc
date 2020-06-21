@@ -12,6 +12,7 @@ matrix_t matrix_activation(const matrix_t* m, const struct activation* fn) {
     size_t size = m->row * m->col;
     // Ideally there would be a cleaner way to handle this
     // Will look into alternatives
+    // Also not sure about the safety of just checking if a void* -> float > 0
     if (fn->type == LRELU && fn->param != NULL && *((float*) fn->param) > 0) {
         const float alpha = *((const float*) fn->param);
         a.data = lrelu_activation2(m->data, size, alpha);
@@ -23,6 +24,7 @@ matrix_t matrix_activation(const matrix_t* m, const struct activation* fn) {
 
 // ReLU(x) := max(x, 0)
 float* relu_activation(const float* layer, const size_t s) {
+    assert(layer != NULL && s > 0);
     float* new_layer = calloc(s, sizeof(float));
     for (int i = 0; i < s; i++) {
         new_layer[i] = (layer[i] > 0) ? layer[i] : 0;
@@ -31,6 +33,7 @@ float* relu_activation(const float* layer, const size_t s) {
 }
 
 float* lrelu_activation(const float* layer, const size_t s) {
+    assert(layer != NULL && s > 0);
     float* new_layer = calloc(s, sizeof(float));
     float a = 0.01f; //(alpha < 0) ? 0.01f : alpha;
     for (int i = 0; i < s; i++) {
@@ -40,6 +43,7 @@ float* lrelu_activation(const float* layer, const size_t s) {
 }
 
 float* lrelu_activation2(const float* layer, const size_t s, const float alpha) {
+    assert(layer != NULL && s > 0);
     float* new_layer = calloc(s, sizeof(float));
     for (int i = 0; i < s; i++) {
         new_layer[i] = (layer[i] > 0) ? layer[i] : (alpha * layer[i]);
@@ -49,6 +53,7 @@ float* lrelu_activation2(const float* layer, const size_t s, const float alpha) 
 
 // sigmoid(x) := 1 / (1 + e^-x) = e^x / (e^x + 1)
 float* sigmoid_activation(const float* layer, const size_t s) {
+    assert(layer != NULL && s > 0);
     float* new_layer = calloc(s, sizeof(float));
     // Do we want to normalize this as well, like softmax? 
     // Or just leave it up to input to make it stable?
@@ -60,6 +65,7 @@ float* sigmoid_activation(const float* layer, const size_t s) {
 
 // hyperbolic tan
 float* tanh_activation(const float* layer, const size_t s) {
+    assert(layer != NULL && s > 0);
     float* new_layer = calloc(s, sizeof(float));
     for (int i = 0; i < s; i++) {
         new_layer[i] = tanhf(layer[i]);
@@ -70,6 +76,7 @@ float* tanh_activation(const float* layer, const size_t s) {
 // softmax / normalized exp
 // consider not normalizing input, since on some inputs it's not needed?
 float* softmax_activation(const float* layer, const size_t s) {
+    assert(layer != NULL && s > 0);
     float* new_layer = calloc(s, sizeof(float));
 
     // see: Practical issues: Numeric stability
