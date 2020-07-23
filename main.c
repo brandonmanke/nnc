@@ -4,6 +4,7 @@
 
 #include "matrix.h"
 #include "activations.h"
+#include "network.h"
 
 int main(int argc, char* argv[]) {
     srand(time(NULL));
@@ -65,6 +66,14 @@ int main(int argc, char* argv[]) {
     matrix_t sum = add_matrix(&p, &negative_p);
     print_matrix(stdout, &sum); // should be 0 matrix
 
+    printf("diff of p - p:\n");
+    matrix_t diff = sub_matrix(&p, &p);
+    print_matrix(stdout, &diff);
+
+    printf("p ** 2:\n");
+    matrix_t pow = pow_matrix(&p, 2.0f);
+    print_matrix(stdout, &pow);
+
     printf("activation of p (relu):\n");
     struct activation act;
     act.type = RELU;
@@ -83,6 +92,10 @@ int main(int argc, char* argv[]) {
     //determinant_matrix(&b);
     //swap_row_matrix(&b, 0, 1);
     //print_matrix(stdout, &b);
+    printf("mse loss function on m & n random functions:");
+    float loss = mse_loss(&m, &n);
+    printf(" %f\n", loss);
+
 
     tensor_t ten;
     rand_tensor(&ten, 3, 3, 3, 100);
@@ -99,6 +112,8 @@ int main(int argc, char* argv[]) {
     free_matrix(&t);
     free_matrix(&p);
     free_matrix(&negative_p);
+    free_matrix(&diff);
+    free_matrix(&pow);
     free_matrix(&sum);
     free_matrix(&a);
     free_matrix(&b);

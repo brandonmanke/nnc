@@ -30,6 +30,11 @@ matrix_t feed_forward(layer_t* l, const matrix_t* input) {
     return matrix_activation(&sum, &l->act);
 }
 
-float mse_loss(matrix_t y, layer_t* l) {
-    return 0.0f;
+float mse_loss(const matrix_t* y_true, const matrix_t* y_pred) {
+    matrix_t diff = sub_matrix(y_true, y_pred);
+    matrix_t squared_err = pow_matrix(&diff, 2.0f);
+    float sum_squared_err = sum_matrix(&squared_err);
+    int size = y_true->row * y_true->col;
+    return sum_squared_err / size;
 }
+

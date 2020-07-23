@@ -25,6 +25,6 @@ matrix_t feed_forward(layer_t* l, const matrix_t* input);
 
 // TODO: loss fn, backprop, train, test, init, delete
 
-float mse_loss(matrix_t y, layer_t* l);
+float mse_loss(const matrix_t* y_true, const matrix_t* y_pred);
 
 #endif

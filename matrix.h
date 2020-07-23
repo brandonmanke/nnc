@@ -33,7 +33,13 @@ matrix_t mult_matrix(const matrix_t* m, const matrix_t* n);
 
 matrix_t scalar_mult_matrix(const matrix_t* m, const float scalar);
 
+matrix_t pow_matrix(const matrix_t* m, const float pow);
+
 matrix_t add_matrix(const matrix_t* m, const matrix_t* n);
+
+matrix_t sub_matrix(const matrix_t* m, const matrix_t* n);
+
+float sum_matrix(const matrix_t* m);
 
 matrix_t transpose_matrix(const matrix_t* m);
 

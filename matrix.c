@@ -83,6 +83,18 @@ matrix_t scalar_mult_matrix(const matrix_t* m, const float scalar) {
     return prod;
 }
 
+matrix_t pow_matrix(const matrix_t* m, const float pow) {
+    assert(m != NULL);
+    matrix_t r;
+    create_matrix(&r, m->row, m->col);
+    for (int i = 0; i < m->row; i++) {
+        for (int j = 0; j < m->col; j++) {
+            r.data[i*m->col + j] = powf(m->data[i*m->col + j], pow);
+        }
+    }
+    return r;
+}
+
 // consider alt functions where we modify m directly (i.e. m is sum)
 matrix_t add_matrix(const matrix_t* m, const matrix_t* n) {
     assert(m != NULL && n != NULL);
@@ -93,6 +105,31 @@ matrix_t add_matrix(const matrix_t* m, const matrix_t* n) {
         for (int j = 0; j < m->col; j++) {
             int index = i*m->col + j;
             sum.data[index] = m->data[index] + n->data[index];
+        }
+    }
+    return sum;
+}
+
+matrix_t sub_matrix(const matrix_t* m, const matrix_t* n) {
+    assert(m != NULL && n != NULL);
+    assert((m->row == n->row) && (m->col == n->col));
+    matrix_t diff;
+    create_matrix(&diff, m->row, m->col);
+    for (int i = 0; i < m->row; i++) {
+        for (int j = 0; j < m->col; j++) {
+            int index = i*m->col + j;
+            diff.data[index] = m->data[index] - n->data[index];
+        }
+    }
+    return diff;
+}
+
+float sum_matrix(const matrix_t* m) {
+    assert(m != NULL);
+    float sum = 0.0f;
+    for (int i = 0; i < m->row; i++) {
+        for (int j = 0; j < m->col; j++) {
+            sum += m->data[i*m->col + j];
         }
     }
     return sum;
